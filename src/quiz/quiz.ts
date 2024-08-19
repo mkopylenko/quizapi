@@ -27,8 +27,12 @@ export class Quiz {
   
     public setAnswer(answer: string) {
       //on answer submitted
-      const currentSelection = this.questionsList.getCurrentSelection()
-      this.answers.set(currentSelection?.getQuestionId, [answer, currentSelection?.getCorrectAnswer]);
+      const currentSelection = this.questionsList.getCurrentSelection();
+      const questionId = currentSelection.getQuestionId();
+      if (!questionId){
+        throw new Error('Invalid question id')
+      }
+      this.answers.set(questionId, [answer, currentSelection.getCorrectAnswer()]);
       //TODO: the answers map will be used to check answer and set grades
     }
   
