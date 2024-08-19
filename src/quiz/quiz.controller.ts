@@ -26,7 +26,7 @@ export class QuizController {
   }
 
   @Post('answer')
-  setAnswer(@Body('answer') answer: string) {
+  setAnswer(@Body('answer') answer: number) {
     this.quizService.setAnswer(answer);
     return { message: 'Answer submitted successfully' };
   }
@@ -39,6 +39,11 @@ export class QuizController {
       question: question?.getQuestion(),
       answers: question?.getAnswers(),
     };
+  }
+  
+  @Get('grade')
+  getGrade() {
+    return {grade: this.quizService.getGrade()};
   }
 }
 

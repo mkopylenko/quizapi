@@ -4,7 +4,7 @@ import { QuestionData
 export class QuestionDataList {
     private idMap = new Map<number, QuestionData>;
     private readonly head: QuestionData;
-    private readonly tail: QuestionData;
+    private tail: QuestionData;
     private currentSelection: QuestionData;
     private count = 0;
     constructor(head: QuestionData) {
@@ -13,7 +13,6 @@ export class QuestionDataList {
       this.currentSelection = head;
       this.idMap.set(this.count, this.head);
       this.count++;
-  
     }
   
     public add(data: QuestionData) {
@@ -22,21 +21,26 @@ export class QuestionDataList {
       }
       this.tail.setNext(data);
       data.setPrev(this.tail);
+      this.tail = data;
       this.idMap.set(this.count, data);
       this.count++;
     }
   
-    public selectNext(): QuestionData | null {
+    public selectNext(): QuestionData {
       this.validateCurrentSelection();
-      return this.currentSelection.getNext();
+      const next = this.currentSelection.getNext();
+      this.currentSelection = next;
+      return this.currentSelection;
     }
   
-    public selectPrev(): QuestionData | null {
+    public selectPrev(): QuestionData {
       this.validateCurrentSelection();
-      return this.currentSelection.getPrev();
+      const prev= this.currentSelection.getPrev();
+      this.currentSelection = prev ?? this.currentSelection;
+      return this.currentSelection;
     }
   
-    public getCurrentSelection(): QuestionData | null {
+    public getCurrentSelection(): QuestionData {
       this.validateCurrentSelection();
       return this.currentSelection;
     }
@@ -52,4 +56,8 @@ export class QuestionDataList {
     public moveToStart() {
       this.currentSelection = this.head;
     }
-  }
+
+    public getData(){
+        return this.idMap;
+    }
+}

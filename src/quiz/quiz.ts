@@ -1,6 +1,7 @@
 import { QuestionDataList } from "./question_data_list";
+
 export class Quiz {
-    private answers = new Map<number, string[]>;
+    private answers = new Map<number, number[]>;
     private questionsList: QuestionDataList;
     constructor(questionsList: QuestionDataList) {
       this.questionsList = questionsList;
@@ -8,36 +9,40 @@ export class Quiz {
   
   
     public getNextQuestion() {
-      const nextQuestion = this.questionsList.selectNext();
-      if (!nextQuestion) {
-        //it's the last question
-        // TODO: calculate/show grade
-      }
-      return nextQuestion;
+      return this.questionsList.selectNext();
     }
   
     public getPrevQuestion() {
-      const prevQuestion = this.questionsList.selectPrev();
-      if (!prevQuestion) {
-        //it's the last question
-        // TODO: calculate/show grade
-      }
-      return prevQuestion;
+      return this.questionsList.selectPrev();
     }
   
-    public setAnswer(answer: string) {
-      //on answer submitted
+    public setAnswer(answerIndex: number) {
       const currentSelection = this.questionsList.getCurrentSelection();
-      const questionId = currentSelection.getQuestionId();
-      if (!questionId){
-        throw new Error('Invalid question id')
+      if (!currentSelection){
+        throw new Error('Invalid selection')
       }
-      this.answers.set(questionId, [answer, currentSelection.getCorrectAnswer()]);
-      //TODO: the answers map will be used to check answer and set grades
+      const questionId = currentSelection.getQuestionId();
+      this.answers.set(questionId, [answerIndex, currentSelection.getCorrectAnswerIndex()]);
     }
   
     public getCurrentSelection() {
       return this.questionsList.getCurrentSelection()
+    }
+
+    public getData(){
+        return this.questionsList.getData();
+    }
+
+    public calculateGrade(): number {
+        const questionsCount = this.questionsList.getData().size;
+        let correctAnswersCount =0;
+        for (const [key, value] of this.answers){
+            if (value[0] === value[1]) {
+                correctAnswersCount++;
+                continue;
+            } 
+        }
+        return Math.round((correctAnswersCount * 100)/ questionsCount);
     }
 }
   

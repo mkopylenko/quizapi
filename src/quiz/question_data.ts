@@ -1,7 +1,7 @@
 export class QuestionData {
     private question: string;
     private answers: string[];
-    private correctAnswer: string;
+    private correctAnswerIndex: number;
     private prev: QuestionData | null = null;
     private next: QuestionData | null = null;
     private readonly questionId: number;
@@ -18,8 +18,8 @@ export class QuestionData {
       return this.answers
     }
   
-    public getCorrectAnswer() {
-      return this.correctAnswer;
+    public getCorrectAnswerIndex() {
+      return this.correctAnswerIndex;
     }
   
     public getPrev() {
@@ -37,13 +37,13 @@ export class QuestionData {
     public setNext(data: QuestionData) {
       this.next = data
     }
-    constructor(question: string, answers: string[], correctAnswer: string, id: number) {
+    constructor(question: string, answers: string[], correctAnswerIndex: number, id: number) {
       if (!answers || answers.length < 2) {
-        throw 'Number of answers should be greater than 1';
+        throw new Error('Number of answers should be greater than 1');
       }
       this.question = question;
       this.answers = answers;
-      this.correctAnswer = correctAnswer;
+      this.correctAnswerIndex = correctAnswerIndex;
       this.questionId = id;
     }
   }
