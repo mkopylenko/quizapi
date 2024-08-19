@@ -1,3 +1,4 @@
+import { QuestionDataList } from "./question_data_list";
 export class Quiz {
     private answers = new Map<number, string[]>;
     private questionsList: QuestionDataList;
