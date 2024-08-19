@@ -17,7 +17,7 @@ export class QuestionDataList {
   
     public add(data: QuestionData) {
       if (!this.tail) {
-        throw new Error('Malformed list');
+        throw new Error('add(): Malformed list, no tail');
       }
       this.tail.setNext(data);
       data.setPrev(this.tail);
@@ -47,7 +47,7 @@ export class QuestionDataList {
   
     private validateCurrentSelection() {
       if (!this.currentSelection && !this.head) {
-        throw new Error('Malformed list');
+        throw new Error('validateCurrentSelection(): Malformed list, no current selection');
       } else if (!this.currentSelection) {
         this.currentSelection = this.head;
       }

@@ -1,6 +1,7 @@
 import { QuestionDataList } from "./question_data_list";
 
 export class Quiz {
+
     private answers = new Map<number, number[]>;
     private questionsList: QuestionDataList;
     constructor(questionsList: QuestionDataList) {
@@ -19,7 +20,7 @@ export class Quiz {
     public setAnswer(answerIndex: number) {
       const currentSelection = this.questionsList.getCurrentSelection();
       if (!currentSelection){
-        throw new Error('Invalid selection')
+        throw new Error('setAnswer(): Malformed quiz data: no current selection');
       }
       const questionId = currentSelection.getQuestionId();
       this.answers.set(questionId, [answerIndex, currentSelection.getCorrectAnswerIndex()]);
@@ -33,8 +34,15 @@ export class Quiz {
         return this.questionsList.getData();
     }
 
+    public getAnswersData(){
+        return this.answers;
+    }
+
     public calculateGrade(): number {
         const questionsCount = this.questionsList.getData().size;
+        if (questionsCount==0) {
+            throw new Error('calculateGrade(): No answers data specified');
+        }
         let correctAnswersCount =0;
         for (const [key, value] of this.answers){
             if (value[0] === value[1]) {
